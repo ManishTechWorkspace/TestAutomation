@@ -1,7 +1,0 @@
-## Requirement
-
-        1. [python Python 3.8.5](https://www.python.org)
-        2. OS Windows
-        3. Install Module Request [ pip install request ] [already available on folder venv]
-        4. Install Module Json 
-        5. Install Module Json Path [ pip install jsonpath ] [already available on folder venv]

@@ -1,0 +1,103 @@
+Configuration of our Project
+Creation of virtual environment with python
+Before we start creating, let's understand what is an virtual environment on python.
+A virtual environment in Python is a self-contained directory or folder that allows you to create and manage isolated Python environments for your projects. With environments you can easy manage your dependencies, avoid conflicts with different versions of python.
+
+A virtual environment is (amongst other things):
+
+Used to contain a specific Python interpreter and software libraries and binaries which are needed to support a project (library or application). These are by default isolated from software in other virtual environments and Python interpreters and libraries installed in the operating system.
+Contained in a directory, conventionally either named venv or .venv in the project directory, or under a container directory for lots of virtual environments, such as ~/.virtualenvs.
+Not checked into source control systems such as Git.
+Considered as disposable – it should be simple to delete and recreate it from scratch. You don’t place any project code in the environment
+Not considered as movable or copyable – you just recreate the same environment in the target location.
+You can read more about environments on python here.
+
+Windows
+First, create a folder for your project, after that, open your cmd and navigate to this folder using the command cd:
+ cd tests_with_python
+If you don't know where your folder is, you can run the command ls, you will see the list of the folders and you can navigate through them. Inside of our project folder, run the follow command:
+ python -m venv name_of_environment
+The name of your environment can be anyone, just remember that python is case sensitive, take a look at PEP 8 Style Guide to learn more about Python convention.
+
+To activate our environment, we use the command:
+name_of_environment\Scripts\Activate
+If everything is correct, your environment will be activated and on the cmd you will see like this:
+(name_of_environment) C:\User\tests 
+To disable your environment just run:
+deactivate
+Linux or MacOS
+Create a folder for your project, after that, open your cmd and navigate to this folder using the command cd:
+ cd tests_with_python
+To activate our environment, we use the command:
+source name_of_environment/bin/activate
+If everything is correct, your environment will be activated and on the cmd you will see like this:
+(name_of_environment) your_user_name tests %
+To disable your environment just run:
+deactivate
+Setup of dependencies for the tests
+As we're going to test APIs, we need to install dependencies to help us during our tests, first we will install the requestslibrary to help us to make the requests:
+PS: Make sure that your environment is activated before run this command
+pip install requests
+And to make our tests, we will install the pytests framework:
+pip install pytest
+Creating our first tests
+Definition of the API that will be tested
+For this tutorial, we'll use the Nasa API that return a list of asteroids: Asteroids - NeoWs and we will test the endpoint that Retrieve a list of Asteroids based on their closest approach date to Earth.
+
+About the API:
+
+Base URL: https://api.nasa.gov/neo/rest/v1/feed
+Query parameters:
+Parameter	Type	Default	Description
+start_date	YYYY-MM-DD	none	Starting date for asteroid search
+end_date	YYYY-MM-DD	7 days after start_date	Ending date for asteroid search
+api_key	string	DEMO_KEY	api.nasa.gov key for expanded usage
+For this tutorial, we will focus on three types of tests:
+
+Contract: If the API is able to validate the query parameters that are sent
+Status: If the status codes are correct
+Authentication: Even this API doesn't requires the token, we can do tests with this
+Our Scenarios:
+
+Method	Test	Expected Result
+GET	Search with success	- Return a status code 200
+The body response contains the list of asteroids
+GET	Search without any query parameter	- Return a status code 403
+GET	Search with start date only	- Return a status code 200
+The body response contain the list of asteroid
+GET	Search with end date only	- Return a status code 200
+The body response contain the list of asteroid
+GET	Search in an valid range of dates	- Return a status code 200
+- The body response contain all fields non empty
+GET	Search when start date is bigger than end date	- Return a status code 400
+GET	Search with invalid API Token	- Return a status code 403
+The body response contain the list of asteroid
+Creating our test
+First, we will create a file called tests.py , at this file we will write our tests. To help us to use good practices and write a good automated test, let's use TDD(Test-Driven Development) technique.
+
+This technique consists in:
+
+RED - make a test that fail
+GREEN - make this test pass
+Refactor - Refactoring what was done, removing duplication
+And to write a good suite of test, we will use the 3A technique:
+
+Arrange: prepare the context.
+Act: perform the action we want to demonstrate.
+Assert: show that the outcome we expected actually occurred.
+Starting with red and using 3A technique, we will write the first test Search asteroids with success:
+
+Arrange: We create an variable to insert the api_key, in this step, you can insert any data that will be necessary to execute your test. Normally, at this step we create mock data.
+Act: In this step we called the method responsible to make the request
+Assertion: We validate the response
+The name of the method or class should starts with test
+
+To run our test, at command prompt, run:
+pytest test.py
+To have a better visualization of your tests results, we can use the pytest-html-reporter library to generate an report html, to do it, first we need to install the package:
+pip install pytest-html
+To generate the report, when running the tests, add:
+pytest test.py --html-report=./report/report.html 
+Will be generated one file .html with the results of the tests.
+
+
